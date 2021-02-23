@@ -43,4 +43,24 @@ namespace Hazel
 		glfwMakeContextCurrent(m_Window);
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 	}
+
+	void WindowsWindow::OnUpdate()
+	{
+
+	}
+
+	void WindowsWindow::Shutdowm()
+	{
+
+	}
+
+	void WindowsWindow::SetVSync(bool enabled)
+	{
+
+	}
+
+	bool WindowsWindow::IsVSync() const
+	{
+		return m_Data.VSync;
+	}
 }

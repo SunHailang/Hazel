@@ -20,7 +20,7 @@ namespace Hazel
 		// Window attributes
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
-		void IsVSync() const override;
+		bool IsVSync() const override;
 
 	private:
 		virtual void Init(const WindowProps& props);
