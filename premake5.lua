@@ -70,7 +70,11 @@ project "Hazel"
 		}
 
 	filter "configurations:Debug"
-		defines "HZ_DEBUG"
+		defines 
+		{
+			"HZ_DEBUG",
+			"HZ_ENABLE_ASSERTS"
+		}
 		buildoptions "/MDd"
 		symbols "On"
 		
