@@ -9,6 +9,7 @@
 /bin/
 /bin-int/
 
+/Hazel/vendor/GLFW/
 /Hazel/vendor/Glad/bin/
 /Hazel/vendor/Glad/bin-int/
 
