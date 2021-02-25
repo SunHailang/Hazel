@@ -4,6 +4,7 @@
 
 *.sln
 
+/Sandbox/imgui.ini
 
 /.vs/
 /bin/
