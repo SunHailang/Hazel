@@ -19,7 +19,14 @@ project "Glad"
 
 	filter "system:windows"
 		systemversion "latest"
-		staticruntime "On"
-
-	filter { "system:windows", "configurations:Release" }
-		buildoptions "/MT"
+		staticruntime "on"
+		
+	filter "configurations:Debug"
+		defines "HZ_DEBUG"
+		runtime "Debug"
+		symbols "on"
+		
+	filter "configurations:Release"
+		defines "HZ_RELEASE"
+		runtime "Release"
+		optimize "on"

@@ -10,6 +10,8 @@
 /bin/
 /bin-int/
 
+/Debug/
+
 /Hazel/vendor/GLFW/
 /Hazel/vendor/imgui/
 /Hazel/vendor/glm/

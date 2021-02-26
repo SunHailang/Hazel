@@ -7,13 +7,16 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 
+#include "Renderer/Shader.h"
+#include "Platform/OpenGL/OpenGLBuffer.h"
+
 #include "ImGui/ImGuiLayer.h"
 
 
 
 namespace Hazel 
 {
-	class HAZEL_API Application
+	class Application
 	{
 	public:
 		Application();
@@ -36,9 +39,15 @@ namespace Hazel
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
-
 		LayerStack m_LayerStack;
 
+		unsigned int m_VertexArray;
+
+		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+
+	private:
 		static Application* s_Instance;
 
 	};
