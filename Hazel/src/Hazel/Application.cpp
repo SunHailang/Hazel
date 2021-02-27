@@ -73,12 +73,8 @@ namespace Hazel
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_Shader->Bind();
-			m_VertexBuffer->Bind();
-			m_IndexBuffer->Bind();
-
 			glBindVertexArray(m_VertexArray);
 			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
-			m_Shader->Unbind();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
