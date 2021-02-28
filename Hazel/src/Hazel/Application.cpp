@@ -1,7 +1,11 @@
 #include "hzpch.h"
 #include "Application.h"
 
+#include "Renderer/Renderer.h"
+#include "Renderer/RendererCommand.h"
+
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 #include "Input.h"
 
@@ -40,7 +44,6 @@ namespace Hazel
 		vertexBuffer->SetLayout(layout);
 		m_SquareVA->AddVertexBuffer(vertexBuffer);
 
-
 		uint32_t indices[3] = { 0, 1, 2 };
 		std::shared_ptr<IndexBuffer> indexBuffer;
 		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
@@ -59,6 +62,7 @@ namespace Hazel
 				gl_Position = vec4(a_Position, 1.0);
 			}
 		)";
+
 		std::string fragmentSrc = R"(
 			#version 330 core
 			layout(location = 0) out vec4 color;
@@ -84,11 +88,13 @@ namespace Hazel
 	{
 		while (m_Running)
 		{
-			glClearColor(0.2f, 0.2f, 0.2f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RendererCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+			RendererCommand::Clear();
 
+			Renderer::BeginScene();
 			m_Shader->Bind();
-			glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_SquareVA);
+			Renderer::EndScene();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();

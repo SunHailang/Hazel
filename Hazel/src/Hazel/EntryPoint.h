@@ -9,8 +9,8 @@ int main(int argc, char** argv)
 	Hazel::Log::Init();
 	HZ_CORE_WARN("Initialtion Log!");
 
-	int a = 5;
-	HZ_INFO("Hello! Var={0}", a);
+	int hello = 5;
+	HZ_INFO("Hello! Var={0}", hello);
 
 
 	Hazel::Application* app = Hazel::CreateApplication();
