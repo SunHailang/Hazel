@@ -56,10 +56,7 @@ namespace Hazel
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		// GL 3.3 + GLSL 130 = 460
-		const char* glsl_version = "#version 130";
-		//ImGui_ImplOpenGL3_Init("#version 410");
-		ImGui_ImplOpenGL3_Init(glsl_version);
+		ImGui_ImplOpenGL3_Init("#version 410");
 
 	}
 

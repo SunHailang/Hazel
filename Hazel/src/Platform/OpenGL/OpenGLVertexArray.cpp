@@ -31,7 +31,7 @@ namespace Hazel
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
-		glGenVertexArrays(1, &m_RendererID);
+		glCreateVertexArrays(1, &m_RendererID);
 		glBindVertexArray(m_RendererID);
 	}
 
@@ -50,7 +50,7 @@ namespace Hazel
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(std::shared_ptr<VertexBuffer>& vertexBuffer)
+	void OpenGLVertexArray::AddVertexBuffer(Ref<VertexBuffer>& vertexBuffer)
 	{
 		Bind();
 		vertexBuffer->Bind();
@@ -72,7 +72,7 @@ namespace Hazel
 		m_VertexBuffers.push_back(vertexBuffer);
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(std::shared_ptr<IndexBuffer>& indexBuffer)
+	void OpenGLVertexArray::SetIndexBuffer(Ref<IndexBuffer>& indexBuffer)
 	{
 		Bind();
 		indexBuffer->Bind();

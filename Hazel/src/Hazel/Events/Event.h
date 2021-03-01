@@ -1,9 +1,6 @@
 #pragma once
 
-#include "hzpch.h"
-
 #include "../Core.h"
-
 
 namespace Hazel
 {
@@ -85,6 +82,5 @@ namespace Hazel
 	{
 		return os << e.ToString();
 	}
-
 }
 

@@ -1,13 +1,12 @@
 #pragma once
 
-
-#include "Core.h"
 #include "Events/Event.h"
+#include "Core/Timestep.h"
 
 namespace Hazel
 {
 
-	class HAZEL_API Layer
+	class Layer
 	{
 	public:
 		Layer(const std::string& name = "Layer");
@@ -15,7 +14,7 @@ namespace Hazel
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 
 		virtual void OnImGuiRender() {};
 

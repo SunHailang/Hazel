@@ -1,14 +1,11 @@
 #pragma once
 
-#include "Core.h"
 #include "Layer.h"
-
-#include <vector>
 
 namespace Hazel
 {
 
-	class HAZEL_API LayerStack
+	class LayerStack
 	{
 	public:
 		LayerStack();
