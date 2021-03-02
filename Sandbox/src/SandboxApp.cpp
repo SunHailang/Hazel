@@ -67,7 +67,7 @@ public:
 				color = vec4(u_Color, 1.0);
 			}
 		)";
-		m_Shader.reset(Hazel::Shader::Create(vertexSrc, fragmentSrc));
+		m_Shader = Hazel::Shader::Create("VertexColorTriangle", vertexSrc, fragmentSrc);
 
 		// ----------------------------------------
 
@@ -94,39 +94,13 @@ public:
 		indexBufferSquare.reset(Hazel::IndexBuffer::Create(indicesSquare, sizeof(indicesSquare) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(indexBufferSquare);
 
-		std::string vertexSrcSquare = R"(
-			#version 330 core
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-	
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
+		m_ShaderSquare = Hazel::Shader::Create("assets/shaders/Texture.glsl");
 
-			out vec3 v_Position;
-			out vec2 v_TexCoord;				
+		//m_ShaderSquare.reset(Hazel::Shader::Create(vertexSrcSquare, fragmentSrcSquare));
 
-			void main()
-			{
-				v_Position = a_Position;
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
+		m_TextureWall = Hazel::Texture2D::Create("assets/textures/wall.jpg");
+		m_TextureBox = Hazel::Texture2D::Create("assets/textures/box.png");
 
-		std::string fragmentSrcSquare = R"(
-			#version 330 core
-			layout(location = 0) out vec4 color;
-			in vec3 v_Position;
-			in vec2 v_TexCoord;	
-
-			uniform vec3 u_Color;
-
-			void main()
-			{
-				color = vec4(v_TexCoord, 0.0, 1.0);
-			}
-		)";
-		m_ShaderSquare.reset(Hazel::Shader::Create(vertexSrcSquare, fragmentSrcSquare));
 	}
 
 	void OnUpdate(Hazel::Timestep ts) override
@@ -157,23 +131,33 @@ public:
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f));
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
 
-		
-
 		/*Hazel::MaterialRef material = new Metrial(m_FlatColorShader);
 		Hazel::MetrialInstanceRef material = new MetrialInstance(material);
 
 		material->SetValue("u_Color", readColor);
 		material->SetTexture("u_AlbedoMap", texture);
 		squareMesh->SetMaterial(material);*/
-		glm::vec4 blueColor(0.2f, 0.2f, 0.8f, 1.0f);
+
+		m_TextureBox->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->UploadUniformFloat3("u_Color", blueColor);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->UploadUniformFloat3("u_Color", m_SquareColor);
+		Hazel::Renderer::Submit(m_ShaderSquare, m_SquareVA,
+			glm::translate(glm::mat4(1.0), glm::vec3(0.25f, -0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+		m_TextureWall->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->UploadUniformFloat3("u_Color", m_SquareColor);
 		Hazel::Renderer::Submit(m_ShaderSquare, m_SquareVA);
 
-		glm::vec4 readColor(0.8f, 0.2f, 0.3f, 1.0f);
+
+
+
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->UploadUniformFloat3("u_Color", m_SquareColor);
 		Hazel::Renderer::Submit(m_Shader, m_VertexArraty, transform * scale);
+
 
 
 
@@ -202,6 +186,9 @@ private:
 
 	Hazel::Ref<Hazel::Shader> m_ShaderSquare;
 	Hazel::Ref<Hazel::VertexArray> m_SquareVA;
+
+	Hazel::Ref<Hazel::Texture2D> m_TextureWall;
+	Hazel::Ref<Hazel::Texture2D> m_TextureBox;
 
 	Hazel::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
