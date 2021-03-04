@@ -94,9 +94,9 @@ public:
 		indexBufferSquare.reset(Hazel::IndexBuffer::Create(indicesSquare, sizeof(indicesSquare) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(indexBufferSquare);
 
-		m_ShaderSquare = Hazel::Shader::Create("assets/shaders/Texture.glsl");
+		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
-		//m_ShaderSquare.reset(Hazel::Shader::Create(vertexSrcSquare, fragmentSrcSquare));
+		
 
 		m_TextureWall = Hazel::Texture2D::Create("assets/textures/wall.jpg");
 		m_TextureBox = Hazel::Texture2D::Create("assets/textures/box.png");
@@ -138,18 +138,19 @@ public:
 		material->SetTexture("u_AlbedoMap", texture);
 		squareMesh->SetMaterial(material);*/
 
-		m_TextureBox->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->UploadUniformInt("u_Texture", 0);
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->UploadUniformFloat3("u_Color", m_SquareColor);
-		Hazel::Renderer::Submit(m_ShaderSquare, m_SquareVA,
+		m_TextureBox->Bind();		
+		auto textureShader = m_ShaderLibrary.Get("Texture");
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+		Hazel::Renderer::Submit(textureShader, m_SquareVA,
 			glm::translate(glm::mat4(1.0), glm::vec3(0.25f, -0.25f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		m_TextureWall->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->UploadUniformInt("u_Texture", 0);
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_ShaderSquare)->UploadUniformFloat3("u_Color", m_SquareColor);
-		Hazel::Renderer::Submit(m_ShaderSquare, m_SquareVA);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+		Hazel::Renderer::Submit(textureShader, m_SquareVA);
 
 
 
@@ -181,10 +182,12 @@ public:
 		ImGui::End();
 	}
 private:
+	Hazel::ShaderLibrary m_ShaderLibrary;
+
 	Hazel::Ref<Hazel::Shader> m_Shader;
 	Hazel::Ref<Hazel::VertexArray> m_VertexArraty;
 
-	Hazel::Ref<Hazel::Shader> m_ShaderSquare;
+	//Hazel::Ref<Hazel::Shader> m_ShaderSquare;
 	Hazel::Ref<Hazel::VertexArray> m_SquareVA;
 
 	Hazel::Ref<Hazel::Texture2D> m_TextureWall;

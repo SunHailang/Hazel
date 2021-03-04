@@ -61,7 +61,7 @@ namespace Hazel
 
 	Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
-		HZ_CORE_ASSERT(Exists(name), "Shader not exist!");
+		HZ_CORE_ASSERT(Exists(name), "Shader not found!");
 		return m_Shader[name];
 	}
 
