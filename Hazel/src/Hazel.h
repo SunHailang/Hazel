@@ -22,6 +22,7 @@
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Renderer/Texture.h"
 #include "Hazel/Renderer/VertexArray.h"
+#include "Hazel/Renderer/Renderer2D.h"
 
 #include "Hazel/Renderer/OrthographicCameraController.h"
 
@@ -29,5 +30,5 @@
 // ---------------------------------------------
 
 // -- Entry Point ------------------------------
-#include "Hazel/Core/EntryPoint.h"
+//#include "Hazel/Core/EntryPoint.h"
 // ---------------------------------------------
