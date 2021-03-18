@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
 Sandbox2D::Sandbox2D()
 	:Hazel::Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f, true)
 {
@@ -23,26 +24,47 @@ void Sandbox2D::OnDetach()
 
 void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 {
+	HZ_PROFILE_FUNCTION();
+
 	// Update
-	m_CameraController.OnUpdate(ts);
+	{
+		HZ_PROFILE_SCOPE("CameraController::OnUpdate");
+		m_CameraController.OnUpdate(ts);
+	}
 	// Renderer
-	Hazel::RendererCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
-	Hazel::RendererCommand::Clear();
+	{
+		HZ_PROFILE_SCOPE("Renderer Prep");
+		Hazel::RendererCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+		Hazel::RendererCommand::Clear();
+	}
+	{
+		HZ_PROFILE_SCOPE("Renderer Draw");
+		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Hazel::Renderer2D::DrawQuad({ -1.0f,0.0f }, { 0.8f, 0.8f }, m_SquareColor);
+		Hazel::Renderer2D::DrawQuad({ 0.5f,-0.5f }, { 0.5f, 0.75f }, m_SquareColor);
 
-	Hazel::Renderer2D::DrawQuad({ -1.0f,0.0f }, { 0.8f, 0.8f }, m_SquareColor);
-	Hazel::Renderer2D::DrawQuad({ 0.5f,-0.5f }, { 0.5f, 0.75f }, m_SquareColor);
+		Hazel::Renderer2D::DrawQuad({ 0.2f,0.5f,-0.1f }, { 10.0f, 10.0f }, m_texture);
 
-	Hazel::Renderer2D::DrawQuad({ 0.2f,0.5f,-0.1f }, { 10.0f, 10.0f }, m_texture);
-
-	Hazel::Renderer2D::EndScene();
+		Hazel::Renderer2D::EndScene();
+	}
 }
 
 void Sandbox2D::OnImGuiRender()
 {
+	HZ_PROFILE_FUNCTION();
+
 	ImGui::Begin("Setting");
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+
+	for (auto& result : m_ProfileResults)
+	{
+		//char label[50];
+		//strcpy(label, result.Name);
+		//strcat(label, " %.3fms");
+		//ImGui::Text(label, result.Time);
+	}
+	m_ProfileResults.clear();
 	ImGui::End();
 }
 

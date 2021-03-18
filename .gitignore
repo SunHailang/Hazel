@@ -4,6 +4,8 @@
 
 *.sln
 
+Sandbox/*.json
+
 /Sandbox/imgui.ini
 
 /.vs/
