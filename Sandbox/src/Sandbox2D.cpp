@@ -14,6 +14,8 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
+	HZ_PROFILE_FUNCTION();
+
 	m_texture = Hazel::Texture2D::Create("assets/textures/wall.jpg");
 }
 
@@ -27,10 +29,8 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 	HZ_PROFILE_FUNCTION();
 
 	// Update
-	{
-		HZ_PROFILE_SCOPE("CameraController::OnUpdate");
-		m_CameraController.OnUpdate(ts);
-	}
+	m_CameraController.OnUpdate(ts);
+
 	// Renderer
 	{
 		HZ_PROFILE_SCOPE("Renderer Prep");
