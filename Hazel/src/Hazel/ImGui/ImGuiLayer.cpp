@@ -25,11 +25,6 @@ namespace Hazel
 
 	}
 
-	ImGuiLayer::~ImGuiLayer()
-	{
-
-	}
-
 	void ImGuiLayer::OnAttach()
 	{
 		HZ_PROFILE_FUNCTION();
@@ -97,14 +92,6 @@ namespace Hazel
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(back_current_context);
 		}
-	}
-
-	void ImGuiLayer::OnImGuiRender()
-	{
-		HZ_PROFILE_FUNCTION();
-
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
 	}
 }
 

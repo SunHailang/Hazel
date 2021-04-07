@@ -16,14 +16,15 @@
 #include "Hazel/ImGui/ImGuiLayer.h"
 // -- Renderer ---------------------------------
 #include "Hazel/Renderer/Renderer.h"
+#include "Hazel/Renderer/Renderer2D.h"
 #include "Hazel/Renderer/RendererCommand.h"
 
 #include "Hazel/Renderer/Buffer.h"
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Renderer/Texture.h"
 #include "Hazel/Renderer/VertexArray.h"
-#include "Hazel/Renderer/Renderer2D.h"
 
+#include "Hazel/Renderer/OrthographicCamera.h"
 #include "Hazel/Renderer/OrthographicCameraController.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"

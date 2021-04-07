@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Sandbox2D.h"
+#include "GameLayer.h"
 
 class ExampleLayer : public Hazel::Layer
 {
@@ -192,7 +193,8 @@ public:
 	Sandbox()
 	{
 		//PushLayer(new ExampleLayer());
-		PushLayer(new Sandbox2D());
+		//PushLayer(new Sandbox2D());
+		PushLayer(new GameLayer());
 	}
 	~Sandbox()
 	{
