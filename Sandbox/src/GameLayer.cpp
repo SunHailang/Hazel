@@ -32,14 +32,14 @@ void GameLayer::OnDetach()
 void GameLayer::OnUpdate(Hazel::Timestep ts)
 {
 	m_Time += ts;
-	if ((int)(m_Time*10.0f) % 8 > 4)
+	if (((int)(m_Time * 10.0f)) % 8 > 4)
 		m_Blink = !m_Blink;
 
 	if (m_Level.IsGameOver())
 		m_State = GameState::GameOver;
 
 	const auto& playerPos = m_Level.GetPlayer().GetPosition();
-	m_Camera->SetPosition({ playerPos.x, playerPos.y,0.0f });
+	m_Camera->SetPosition({ playerPos.x, playerPos.y, 0.0f });
 
 	switch (m_State)
 	{
@@ -48,8 +48,10 @@ void GameLayer::OnUpdate(Hazel::Timestep ts)
 		break;
 	}
 
+	m_Level.GetPlayer().UpdateParticles(ts);
+
 	//Render
-	Hazel::RendererCommand::SetClearColor({ 0.0f,0.0f,0.0f,1.0f });
+	Hazel::RendererCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
 	Hazel::RendererCommand::Clear();
 
 	Hazel::Renderer2D::BeginScene(*m_Camera);

@@ -72,7 +72,7 @@ void Player::OnUpdate(Hazel::Timestep ts)
 		m_SmokeNextEmitTime += m_SmokeEmitInterval;
 	}
 
-	m_ParticleSystem.OnUpdate(ts);
+	//m_ParticleSystem.OnUpdate(ts);
 }
 
 void Player::OnRender()

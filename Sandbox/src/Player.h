@@ -19,6 +19,7 @@ public:
 	void OnImGuiRender();
 
 	void Reset();
+	void UpdateParticles(Hazel::Timestep ts) { m_ParticleSystem.OnUpdate(ts); }
 
 	float GetRotation() { return m_Velcity.y * 4.0f - 90.0f; }
 	const glm::vec2& GetPosition() const { return m_Position; }

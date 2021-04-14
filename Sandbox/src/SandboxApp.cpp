@@ -24,8 +24,7 @@ public:
 			0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
 			0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
 		};
-		Hazel::Ref<Hazel::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Hazel::VertexBuffer::Create(vertics, sizeof(vertics)));
+		Hazel::Ref<Hazel::VertexBuffer> vertexBuffer = Hazel::VertexBuffer::Create(vertics, sizeof(vertics));
 
 		Hazel::BufferLayout layout = {
 			{ Hazel::ShaderDataType::Float3, "a_Position" },
@@ -35,8 +34,7 @@ public:
 		m_VertexArraty->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		Hazel::Ref<Hazel::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		Hazel::Ref<Hazel::IndexBuffer> indexBuffer = Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArraty->SetIndexBuffer(indexBuffer);
 
 		std::string vertexSrc = R"(
@@ -83,8 +81,7 @@ public:
 			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
-		Hazel::Ref<Hazel::VertexBuffer> vertexBufferSquare;
-		vertexBufferSquare.reset(Hazel::VertexBuffer::Create(verticsSquare, sizeof(verticsSquare)));
+		Hazel::Ref<Hazel::VertexBuffer> vertexBufferSquare = Hazel::VertexBuffer::Create(verticsSquare, sizeof(verticsSquare));
 
 		Hazel::BufferLayout layoutSquare = {
 			{ Hazel::ShaderDataType::Float3, "a_Position" },
@@ -94,8 +91,7 @@ public:
 		m_SquareVA->AddVertexBuffer(vertexBufferSquare);
 
 		uint32_t indicesSquare[6] = { 0, 1, 2, 2, 3, 0 };
-		Hazel::Ref<Hazel::IndexBuffer> indexBufferSquare;
-		indexBufferSquare.reset(Hazel::IndexBuffer::Create(indicesSquare, sizeof(indicesSquare) / sizeof(uint32_t)));
+		Hazel::Ref<Hazel::IndexBuffer> indexBufferSquare = Hazel::IndexBuffer::Create(indicesSquare, sizeof(indicesSquare) / sizeof(uint32_t));
 		m_SquareVA->SetIndexBuffer(indexBufferSquare);
 
 		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
@@ -193,8 +189,8 @@ public:
 	Sandbox()
 	{
 		//PushLayer(new ExampleLayer());
-		//PushLayer(new Sandbox2D());
-		PushLayer(new GameLayer());
+		PushLayer(new Sandbox2D());
+		//PushLayer(new GameLayer());
 	}
 	~Sandbox()
 	{
