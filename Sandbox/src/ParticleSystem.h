@@ -16,10 +16,10 @@ class ParticleSystem
 public:
 	ParticleSystem();
 
-	void Emit(const ParticleProps& particleProps);
-
 	void OnUpdate(Hazel::Timestep ts);
-	void OnRender();
+	void OnRender(Hazel::OrthographicCamera& camera);
+
+	void Emit(const ParticleProps& particleProps);
 
 private:
 	struct Paricle

@@ -10,6 +10,44 @@ ParticleSystem::ParticleSystem()
 	m_PariclePool.resize(1000);
 }
 
+void ParticleSystem::OnUpdate(Hazel::Timestep ts)
+{
+	for (auto& particle : m_PariclePool)
+	{
+		if (!particle.Active) continue;
+
+		if (particle.LiftRemaining <= 0.0f)
+		{
+			particle.Active = false;
+			continue;
+		}
+
+		particle.LiftRemaining -= ts;
+		particle.Position += particle.Velocity * (float)ts;
+		particle.Rotation += 0.1f * ts;
+	}
+}
+
+void ParticleSystem::OnRender(Hazel::OrthographicCamera& camera)
+{
+	Hazel::Renderer2D::BeginScene(camera);
+	for (auto& particle : m_PariclePool)
+	{
+		if (!particle.Active) continue;
+
+		// Fade away particles
+		float life = particle.LiftRemaining / particle.LiftTime;
+		glm::vec4 color = glm::lerp(particle.ColorEnd, particle.ColorBegin, life);
+		//color.a = color.a * life;
+
+		float size = glm::lerp(particle.SizeEnd, particle.SizeBegin, life);
+
+		// Render
+		Hazel::Renderer2D::DrawRotatedQuad(particle.Position, { size, size }, particle.Rotation, color);
+	}
+	Hazel::Renderer2D::EndScene();
+}
+
 void ParticleSystem::Emit(const ParticleProps& particleProps)
 {
 	Paricle& paricle = m_PariclePool[m_PoolIndex];
@@ -37,36 +75,4 @@ void ParticleSystem::Emit(const ParticleProps& particleProps)
 	m_PoolIndex = --m_PoolIndex % m_PariclePool.size();
 }
 
-void ParticleSystem::OnUpdate(Hazel::Timestep ts)
-{
-	for (auto& particle : m_PariclePool)
-	{
-		if (!particle.Active) continue;
-
-		if (particle.LiftRemaining <= 0.0f)
-		{
-			particle.Active = false;
-			continue;
-		}
-
-		particle.LiftRemaining -= ts;
-		particle.Position += particle.Velocity * (float)ts;
-		particle.Rotation += 0.1f * ts;
-	}
-}
-
-void ParticleSystem::OnRender()
-{
-	for (auto& particle : m_PariclePool)
-	{
-		if (!particle.Active) continue;
-
-		float life = particle.LiftRemaining / particle.LiftTime;
-		glm::vec4 color = glm::lerp(particle.ColorEnd, particle.ColorBegin, life);
-		color.a = color.a * life;
-
-		float size = glm::lerp(particle.SizeEnd, particle.SizeBegin, life);
-		Hazel::Renderer2D::DrawRotatedQuad(particle.Position, { size, size }, particle.Rotation, color);
-	}
-}
 
