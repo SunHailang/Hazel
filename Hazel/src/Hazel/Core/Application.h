@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Hazel/Core/Core.h"
+
 #include "Window.h"
 #include "LayerStack.h"
 #include "Hazel/Events/Event.h"
@@ -14,7 +16,7 @@ namespace Hazel
 	class Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Hazel App");
 		virtual ~Application();
 
 		void Run();
@@ -27,12 +29,14 @@ namespace Hazel
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
 
+		void Close();
+
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
 	private:
-		std::unique_ptr<Window> m_Window;
+		Scope<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;

@@ -25,16 +25,14 @@ private:
 	Hazel::Ref<Hazel::Shader> m_FlatColorShader;
 
 	Hazel::Ref<Hazel::Texture2D> m_texture;
+	Hazel::Ref<Hazel::Texture2D> m_spriteSheet;
+	Hazel::Ref<Hazel::SubTexture2D> m_textureStairs;
 
-	struct ProfileResult
-	{
-		const char* Name;
-		float Time;
-	};
-	std::vector<ProfileResult> m_ProfileResults;
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 	ParticleProps m_Particle;
 	ParticleSystem m_ParticleSystem;
+
+	std::unordered_map<char, Hazel::Ref<Hazel::SubTexture2D>> s_TextureMap;
 
 };

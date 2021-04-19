@@ -5,8 +5,10 @@
 *.sln
 
 Sandbox/*.json
-
 /Sandbox/imgui.ini
+
+/Hazel-Editor/imgui.ini
+/Hazel-Editor/*.json
 
 /.vs/
 /bin/
