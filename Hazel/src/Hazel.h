@@ -14,6 +14,9 @@
 #include "Hazel/Core/MouseButtonCodes.h"
 
 #include "Hazel/ImGui/ImGuiLayer.h"
+
+#include "Hazel/Scene/Scene.h"
+
 // -- Renderer ---------------------------------
 #include "Hazel/Renderer/Renderer.h"
 #include "Hazel/Renderer/Renderer2D.h"

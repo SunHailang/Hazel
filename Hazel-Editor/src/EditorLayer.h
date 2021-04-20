@@ -21,12 +21,15 @@ namespace Hazel
 	private:
 		Hazel::OrthographicCameraController m_CameraController;
 
+		Hazel::Ref<Scene> m_ActiveScene;
+
 		// Temp
 		Hazel::Ref<Hazel::VertexArray> m_SquareVA;
 		Hazel::Ref<Hazel::Shader> m_FlatColorShader;
 
 		Hazel::Ref<Hazel::Framebuffer> m_Framebuffer;
 
+		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 	};
 }

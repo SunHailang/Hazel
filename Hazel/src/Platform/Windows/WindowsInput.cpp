@@ -41,7 +41,7 @@ namespace Hazel
 
 	float WindowsInput::GetMouseYImpl()
 	{
-		//auto[x, y] = GetMousePositionImpl();
+		//auto[x; y] = GetMousePositionImpl();
 		auto pos = GetMousePositionImpl();
 		return std::get<1>(pos);
 	}

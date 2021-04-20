@@ -24,6 +24,11 @@ namespace Hazel
 		m_Framebuffer = Hazel::Framebuffer::Create(fbSpec);
 
 		m_CameraController.SetZoomLevel(5.0f);
+
+		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
+		
+		auto square = m_ActiveScene->CreateEntity();
+
 	}
 
 	void EditorLayer::OnDetach()
@@ -36,7 +41,10 @@ namespace Hazel
 		HZ_PROFILE_FUNCTION();
 
 		// Update
-		m_CameraController.OnUpdate(ts);
+		if (m_ViewportFocused)
+			m_CameraController.OnUpdate(ts);
+		// Update Scene
+		m_ActiveScene->OnUpdate(ts);
 
 		// Renderer
 		Hazel::Renderer2D::ResetStats();
@@ -121,9 +129,16 @@ namespace Hazel
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				// Disabling fullscreen would allow the window to be moved to the front of other windows,
-				// which we can't undo at the moment without finer window depth/z control.
+				if (ImGui::MenuItem("New")) HZ_INFO("Menu File Item New");
+				if (ImGui::MenuItem("Open")) HZ_INFO("Menu File Item Open");
+				if (ImGui::MenuItem("Save")) HZ_INFO("Menu File Item Save");
 				if (ImGui::MenuItem("Exit")) Hazel::Application::Get().Close();
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("View"))
+			{
+				if (ImGui::MenuItem("Options")) HZ_INFO("Menu View Item Options");
 				ImGui::EndMenu();
 			}
 
@@ -141,9 +156,13 @@ namespace Hazel
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
+
+		m_ViewportFocused = ImGui::IsWindowFocused();
+		m_ViewportHovered = ImGui::IsWindowHovered();
+		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		//HZ_WARN("Viewport Size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
-		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize))
+		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
 		{
 			m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };

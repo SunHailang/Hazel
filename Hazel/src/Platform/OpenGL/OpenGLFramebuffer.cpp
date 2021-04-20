@@ -6,6 +6,8 @@
 namespace Hazel
 {
 
+	static const uint32_t s_MaxFramebufferSize = 8192;
+
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
 		:m_Spacifitcation(spec)
 	{
@@ -54,7 +56,7 @@ namespace Hazel
 	void OpenGLFramebuffer::Bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
-		glViewport(0, 0, m_Spacifitcation.Width, m_Spacifitcation.Height);
+		
 	}
 
 	void OpenGLFramebuffer::Unbind()
@@ -64,9 +66,18 @@ namespace Hazel
 
 	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
 	{
-		m_Spacifitcation.Width = width;
-		m_Spacifitcation.Height = height;
-		Invalidate();
+		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
+		{
+			HZ_CORE_WARN("Attemped to resize to {0}, {1}", width, height);
+			return;
+		}
+		if (width != m_Spacifitcation.Width || height != m_Spacifitcation.Height)
+		{
+			m_Spacifitcation.Width = width;
+			m_Spacifitcation.Height = height;
+			glViewport(0, 0, m_Spacifitcation.Width, m_Spacifitcation.Height);
+			Invalidate();
+		}
 	}
 
 }

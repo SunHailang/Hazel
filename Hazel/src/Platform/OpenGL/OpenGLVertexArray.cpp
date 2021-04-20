@@ -37,7 +37,7 @@ namespace Hazel
 		glBindVertexArray(m_RendererID);
 	}
 
-	OpenGLVertexArray::~OpenGLVertexArray() 
+	OpenGLVertexArray::~OpenGLVertexArray()
 	{
 		HZ_PROFILE_FUNCTION();
 
