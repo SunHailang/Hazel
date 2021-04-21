@@ -4,14 +4,10 @@
 #include "Hazel/Renderer/Renderer2D.h"
 #include "Entity.h"
 
-#include <glm/glm.hpp>
+//#include <glm/glm.hpp>
 
 namespace Hazel
 {
-	static void DoMaths(const glm::mat4& transform)
-	{
-
-	}
 
 	Scene::Scene()
 	{
@@ -22,7 +18,7 @@ namespace Hazel
 
 	}
 
-	entt::entity Scene::CreateEntity()
+	entt::entity Scene::CreateEntity(const std::string& name)
 	{
 		return m_Registry.create();
 	}

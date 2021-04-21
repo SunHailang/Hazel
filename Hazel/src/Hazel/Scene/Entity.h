@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Scene.h"
 
 #include "entt.hpp"
 
 namespace Hazel
 {
+	class Scene;
+
 	class Entity
 	{
 	public:
