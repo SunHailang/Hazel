@@ -23,30 +23,35 @@ namespace Hazel
 		fbSpec.Height = 720;
 		m_Framebuffer = Hazel::Framebuffer::Create(fbSpec);
 
-		m_CameraController.SetZoomLevel(5.0f);
+		//m_CameraController.SetZoomLevel(5.0f);
 
 		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
 
-		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
-		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+		auto square = m_ActiveScene->CreateEntity("Square");
+		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+		m_SquareEntity = square;
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
-		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+		m_CameraEntity.AddComponent<CameraComponent>();
 
 		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Clip-Space Camera Entity");
-		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>();
 		cc.Primary = false;
 
+		
 	}
 
 	void EditorLayer::OnDetach()
 	{
-
+		HZ_PROFILE_FUNCTION();
 	}
 
 	void EditorLayer::OnUpdate(Hazel::Timestep ts)
 	{
 		HZ_PROFILE_FUNCTION();
+
+		// Resize
+		m_ActiveScene->OnViewportResize(m_Framebuffer->GetSpecification().Width, m_Framebuffer->GetSpecification().Height);
 
 		// Update
 		if (m_ViewportFocused)
@@ -57,6 +62,10 @@ namespace Hazel
 		m_Framebuffer->Bind();
 		Hazel::RendererCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
 		Hazel::RendererCommand::Clear();
+
+		//Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		//Hazel::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 2.0f, 2.0f }, { 0.0f, 1.0f, 0.0f, 1.0f });
+		//Hazel::Renderer2D::EndScene();
 
 		// Update Scene
 		m_ActiveScene->OnUpdate(ts);
@@ -166,6 +175,16 @@ namespace Hazel
 				m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
 				m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
 			}
+			{
+				auto& camear = m_SecondCameraEntity.GetComponent<CameraComponent>().Camera;
+				float orthoSize = camear.GetOrthographicSize();
+				if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+				{
+					camear.SetOrthographicSize(orthoSize);
+				}
+			}
+
+
 
 			ImGui::End();
 		}

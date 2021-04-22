@@ -255,20 +255,20 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		constexpr size_t quadVertextCount = 4;
-		const float texIndex = 0.0f; // White Texture
-		const glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f},{1.0f, 1.0f},{0.0f, 1.0f} };
+		constexpr size_t quadVertexCount = 4;
+		const float textureIndex = 0.0f; // White Texture
+		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 		const float tilingFactor = 1.0f;
 
 		if (s_Data.QuadIndexCount >= Renderer2DStorage::MaxIndices)
 			FlushAndReset();
 
-		for (size_t i = 0; i < quadVertextCount; i++)
+		for (size_t i = 0; i < quadVertexCount; i++)
 		{
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];;
+			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
 			s_Data.QuadVertexBufferPtr->Color = color;
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
-			s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 			s_Data.QuadVertexBufferPtr++;
 		}

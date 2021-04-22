@@ -19,6 +19,10 @@ namespace Hazel
 
 
 		void OnUpdate(Timestep ts);
+		void OnViewportResize(uint32_t width, uint32_t height);
+
+		uint32_t GetViewportWidth() const { return m_ViewportWidth; }
+		uint32_t GetViewportHeight() const { return m_ViewportHeight; }
 
 	private:
 		template<typename T>
@@ -26,6 +30,8 @@ namespace Hazel
 
 	private:
 		entt::registry m_Registry;
+
+		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 
 		friend class Entity;
 	};
