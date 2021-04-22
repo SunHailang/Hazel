@@ -34,6 +34,7 @@
 
 #include "Hazel/Renderer/OrthographicCamera.h"
 #include "Hazel/Renderer/OrthographicCameraController.h"
+#include "Hazel/Renderer/Camera.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
 // ---------------------------------------------

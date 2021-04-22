@@ -23,6 +23,10 @@ namespace Hazel
 
 		Hazel::Ref<Scene> m_ActiveScene;
 		Hazel::Entity m_SquareEntity;
+		Hazel::Entity m_CameraEntity;
+		Hazel::Entity m_SecondCameraEntity;
+
+		bool m_PrimaryCamera = true;
 
 		// Temp
 		Hazel::Ref<Hazel::VertexArray> m_SquareVA;

@@ -29,6 +29,14 @@ namespace Hazel
 
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
+		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+
+		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Clip-Space Camera Entity");
+		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+		cc.Primary = false;
+
 	}
 
 	void EditorLayer::OnDetach()
@@ -50,12 +58,8 @@ namespace Hazel
 		Hazel::RendererCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
 		Hazel::RendererCommand::Clear();
 
-		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
-
 		// Update Scene
 		m_ActiveScene->OnUpdate(ts);
-
-		Hazel::Renderer2D::EndScene();
 
 		m_Framebuffer->Unbind();
 	}
@@ -125,7 +129,7 @@ namespace Hazel
 				ImGui::Separator();
 				if (ImGui::MenuItem("Save")) HZ_INFO("Menu File Item Save");
 				ImGui::Separator();
-				if (ImGui::MenuItem("Exit")) Hazel::Application::Get().Close();				
+				if (ImGui::MenuItem("Exit")) Hazel::Application::Get().Close();
 				ImGui::EndMenu();
 			}
 
@@ -154,7 +158,15 @@ namespace Hazel
 				ImGui::ColorEdit4("SqudColor", glm::value_ptr(color));
 				ImGui::Separator();
 			}
-			
+
+			ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
+
+			if (ImGui::Checkbox("Camrea A", &m_PrimaryCamera))
+			{
+				m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
+				m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
+			}
+
 			ImGui::End();
 		}
 		{
