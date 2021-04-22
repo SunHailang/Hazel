@@ -22,6 +22,7 @@ namespace Hazel
 		Hazel::OrthographicCameraController m_CameraController;
 
 		Hazel::Ref<Scene> m_ActiveScene;
+		Hazel::Entity m_SquareEntity;
 
 		// Temp
 		Hazel::Ref<Hazel::VertexArray> m_SquareVA;

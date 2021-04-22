@@ -82,15 +82,12 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 
 	if (Hazel::Input::IsMouseButtonPressed(HZ_MOUSE_BUTTON_LEFT))
 	{
-		auto posPair = Hazel::Input::GetMousePosition();
+		auto [x, y] = Hazel::Input::GetMousePosition();
 		auto width = Hazel::Application::Get().GetWindow().GetWidth();
 		auto height = Hazel::Application::Get().GetWindow().GetHeight();
 
 		auto bounds = m_CameraController.GetBounds();
 		auto pos = m_CameraController.GetCamera().GetPosition();
-
-		float x = posPair.first;
-		float y = posPair.second;
 
 		x = (x / width) * bounds.GetWidth() - bounds.GetWidth() * 0.5f;
 		y = bounds.GetHeight() * 0.5f - (y / height) * bounds.GetHeight();

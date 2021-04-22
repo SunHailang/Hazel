@@ -26,9 +26,9 @@ namespace Hazel
 		m_CameraController.SetZoomLevel(5.0f);
 
 		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
-		
-		auto square = m_ActiveScene->CreateEntity();
 
+		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
+		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 	}
 
 	void EditorLayer::OnDetach()
@@ -43,29 +43,19 @@ namespace Hazel
 		// Update
 		if (m_ViewportFocused)
 			m_CameraController.OnUpdate(ts);
-		// Update Scene
-		m_ActiveScene->OnUpdate(ts);
 
 		// Renderer
 		Hazel::Renderer2D::ResetStats();
-		{
-			HZ_PROFILE_SCOPE("Renderer Prep");
-			m_Framebuffer->Bind();
+		m_Framebuffer->Bind();
+		Hazel::RendererCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+		Hazel::RendererCommand::Clear();
 
-			Hazel::RendererCommand::SetClearColor(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
-			Hazel::RendererCommand::Clear();
-		}
-		{
-			static float rotation = 0.0f;
-			rotation += ts * 50.0f;
+		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-			HZ_PROFILE_SCOPE("Renderer Draw");
-			Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
-			Hazel::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-			Hazel::Renderer2D::DrawRotatedQuad({ 0.5f, -0.5f }, { 0.5f, 0.5f }, glm::radians(rotation), { 0.2f, 0.3f, 0.8f, 1.0f });
-			Hazel::Renderer2D::EndScene();
+		// Update Scene
+		m_ActiveScene->OnUpdate(ts);
 
-		}
+		Hazel::Renderer2D::EndScene();
 
 		m_Framebuffer->Unbind();
 	}
@@ -130,9 +120,12 @@ namespace Hazel
 			if (ImGui::BeginMenu("File"))
 			{
 				if (ImGui::MenuItem("New")) HZ_INFO("Menu File Item New");
+				ImGui::Separator();
 				if (ImGui::MenuItem("Open")) HZ_INFO("Menu File Item Open");
+				ImGui::Separator();
 				if (ImGui::MenuItem("Save")) HZ_INFO("Menu File Item Save");
-				if (ImGui::MenuItem("Exit")) Hazel::Application::Get().Close();
+				ImGui::Separator();
+				if (ImGui::MenuItem("Exit")) Hazel::Application::Get().Close();				
 				ImGui::EndMenu();
 			}
 
@@ -144,37 +137,49 @@ namespace Hazel
 
 			ImGui::EndMenuBar();
 		}
-
-		ImGui::Begin("Setting");
-		auto stats = Hazel::Renderer2D::GetStats();
-		ImGui::Text("Renderer2D Stats:");
-		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-		ImGui::Text("Quads: %d", stats.QuadCount);
-		ImGui::Text("Vertics: %d", stats.GetTotalVertexCount());
-		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-		ImGui::End();
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-		ImGui::Begin("Viewport");
-
-		m_ViewportFocused = ImGui::IsWindowFocused();
-		m_ViewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused || !m_ViewportHovered);
-
-		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
 		{
-			m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+			ImGui::Begin("Setting");
+			auto stats = Hazel::Renderer2D::GetStats();
+			ImGui::Text("Renderer2D Stats:");
+			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+			ImGui::Text("Quads: %d", stats.QuadCount);
+			ImGui::Text("Vertics: %d", stats.GetTotalVertexCount());
+			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-			m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
+			if (m_SquareEntity)
+			{
+				ImGui::Separator();
+				ImGui::Text("%s", m_SquareEntity.GetComponent<TagComponent>().Tag.c_str());
+				auto& color = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
+				ImGui::ColorEdit4("SqudColor", glm::value_ptr(color));
+				ImGui::Separator();
+			}
+			
+			ImGui::End();
 		}
-		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		ImGui::End();
-		ImGui::PopStyleVar();
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+			ImGui::Begin("Viewport");
 
-		ImGui::End();
+			m_ViewportFocused = ImGui::IsWindowFocused();
+			m_ViewportHovered = ImGui::IsWindowHovered();
+			Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+
+			ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+			if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
+			{
+				m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+				m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+				m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
+			}
+			uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+			ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			ImGui::End();
+			ImGui::PopStyleVar();
+
+			ImGui::End();
+		}
 	}
 
 	void EditorLayer::OnEvent(Hazel::Event& event)

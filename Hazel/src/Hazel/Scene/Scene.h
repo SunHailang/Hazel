@@ -17,6 +17,7 @@ namespace Hazel
 		Entity CreateEntity(const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
+
 		void OnUpdate(Timestep ts);
 
 	private:
@@ -26,5 +27,6 @@ namespace Hazel
 	private:
 		entt::registry m_Registry;
 
+		friend class Entity;
 	};
 }

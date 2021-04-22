@@ -1,11 +1,11 @@
 #pragma once
 
+#include "Scene.h"
 
 #include "entt.hpp"
 
 namespace Hazel
 {
-	class Scene;
 
 	class Entity
 	{
@@ -19,7 +19,7 @@ namespace Hazel
 		{
 			HZ_CORE_ASSERT(!HasComponent<T>(), "Entity already has component");
 			T& component = m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
-			m_Scene->OnComponentAdded<T>(*this, component);
+			//m_Scene->OnComponentAdded<T>(*this, component);
 			return component;
 		}
 
@@ -33,7 +33,7 @@ namespace Hazel
 		template<typename T>
 		bool HasComponent()
 		{
-			return m_Scene->m_Registry.has<T>(m_EntityHandle);
+			return m_Scene->m_Registry.any_of<T>(m_EntityHandle);
 		}
 
 		template<typename T>
