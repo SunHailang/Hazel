@@ -48,7 +48,7 @@ project "Hazel"
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"yaml-cpp",
+		-- "yaml-cpp",
 		"opengl32.lib"
 	}
 
