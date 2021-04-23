@@ -1,6 +1,7 @@
 #pragma once
 
 // for use by Hazel appliction
+#include "Hazel/Core/Core.h"
 
 #include "Hazel/Core/Application.h"
 #include "Hazel/Core/Log.h"
@@ -18,6 +19,7 @@
 #include "Hazel/Scene/Scene.h"
 #include "Hazel/Scene/Component.h"
 #include "Hazel/Scene/Entity.h"
+#include "Hazel/Scene/ScriptableEntity.h"
 
 // -- Renderer ---------------------------------
 #include "Hazel/Renderer/Renderer.h"
