@@ -30,6 +30,10 @@ namespace Hazel
 
 		auto square = m_ActiveScene->CreateEntity("Square");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+
+		auto redSquare = m_ActiveScene->CreateEntity("Red Square");
+		redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 0.2f, 0.0f, 1.0f });
+
 		m_SquareEntity = square;
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
@@ -184,70 +188,69 @@ namespace Hazel
 
 			ImGui::EndMenuBar();
 		}
-
-		m_SceneHierarchyPanel.OnImGuiRender();
-
 		{
-			ImGui::Begin("Setting");
-			auto stats = Hazel::Renderer2D::GetStats();
-			ImGui::Text("Renderer2D Stats:");
-			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-			ImGui::Text("Quads: %d", stats.QuadCount);
-			ImGui::Text("Vertics: %d", stats.GetTotalVertexCount());
-			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+			m_SceneHierarchyPanel.OnImGuiRender();
 
-			if (m_SquareEntity)
 			{
-				ImGui::Separator();
-				ImGui::Text("%s", m_SquareEntity.GetComponent<TagComponent>().Tag.c_str());
-				auto& color = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
-				ImGui::ColorEdit4("SqudColor", glm::value_ptr(color));
-				ImGui::Separator();
-			}
+				ImGui::Begin("Setting");
+				auto stats = Hazel::Renderer2D::GetStats();
+				ImGui::Text("Renderer2D Stats:");
+				ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+				ImGui::Text("Quads: %d", stats.QuadCount);
+				ImGui::Text("Vertics: %d", stats.GetTotalVertexCount());
+				ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-			ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
-
-			if (ImGui::Checkbox("Camrea A", &m_PrimaryCamera))
-			{
-				m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
-				m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
-			}
-			{
-				auto& camear = m_SecondCameraEntity.GetComponent<CameraComponent>().Camera;
-				float orthoSize = camear.GetOrthographicSize();
-				if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+				if (m_SquareEntity)
 				{
-					camear.SetOrthographicSize(orthoSize);
+					ImGui::Separator();
+					ImGui::Text("%s", m_SquareEntity.GetComponent<TagComponent>().Tag.c_str());
+					auto& color = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
+					ImGui::ColorEdit4("SqudColor", glm::value_ptr(color));
+					ImGui::Separator();
 				}
+
+				ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
+
+				if (ImGui::Checkbox("Camrea A", &m_PrimaryCamera))
+				{
+					m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
+					m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
+				}
+				{
+					auto& camear = m_SecondCameraEntity.GetComponent<CameraComponent>().Camera;
+					float orthoSize = camear.GetOrthographicSize();
+					if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+					{
+						camear.SetOrthographicSize(orthoSize);
+					}
+				}
+				ImGui::End();
 			}
 
-
-
-			ImGui::End();
-		}
-		{
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-			ImGui::Begin("Viewport");
-
-			m_ViewportFocused = ImGui::IsWindowFocused();
-			m_ViewportHovered = ImGui::IsWindowHovered();
-			Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused || !m_ViewportHovered);
-
-			ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-			if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
 			{
-				m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-				m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+				ImGui::Begin("Viewport");
 
-				m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
+				m_ViewportFocused = ImGui::IsWindowFocused();
+				m_ViewportHovered = ImGui::IsWindowHovered();
+				Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+
+				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+				if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
+				{
+					m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+					m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+					m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
+				}
+				uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+				ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+				ImGui::End();
+				ImGui::PopStyleVar();
 			}
-			uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
-			ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-			ImGui::End();
-			ImGui::PopStyleVar();
+		};
 
-			ImGui::End();
-		}
+		ImGui::End();
 	}
 
 	void EditorLayer::OnEvent(Hazel::Event& event)
