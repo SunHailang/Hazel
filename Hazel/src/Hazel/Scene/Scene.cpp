@@ -57,7 +57,7 @@ namespace Hazel
 				if (camera.Primary)
 				{
 					mainCamera = &camera.Camera;
-					cameraTransform = &transform.Transform;
+					cameraTransform = &transform.GetTransform();
 					break;
 				}
 			}
@@ -70,7 +70,7 @@ namespace Hazel
 			for (auto entity : grop)
 			{
 				auto [transform, sprite] = grop.get<TransformComponent, SpriteRendererComponent>(entity);
-				Renderer2D::DrawQuad(transform.Transform, sprite.Color);
+				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
 			}
 
 			Renderer2D::EndScene();
