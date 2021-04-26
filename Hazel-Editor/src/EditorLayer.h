@@ -24,7 +24,6 @@ namespace Hazel
 		Hazel::OrthographicCameraController m_CameraController;
 
 		Hazel::Ref<Scene> m_ActiveScene;
-		Hazel::Entity m_SquareEntity;
 		Hazel::Entity m_CameraEntity;
 		Hazel::Entity m_SecondCameraEntity;
 
