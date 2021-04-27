@@ -1,8 +1,9 @@
 #include "hzpch.h"
 #include "OpenGLShader.h"
 
-#include <glad/glad.h>
+#include "Hazel/Core/Core.h"
 
+#include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Hazel
@@ -12,9 +13,11 @@ namespace Hazel
 	{
 		if (type == "vertex")
 			return GL_VERTEX_SHADER;
+
 		if (type == "fragment" || type == "pixel")
 			return GL_FRAGMENT_SHADER;
-		HZ_CORE_ASSERT(false, "Unknow Shader type: '{0}'", type);
+
+		HZ_CORE_ASSERT(false, "Unknow Shader type!");
 		return 0;
 	}
 

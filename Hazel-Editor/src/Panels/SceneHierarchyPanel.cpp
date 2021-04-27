@@ -4,6 +4,15 @@
 #include <imgui/imgui_internal.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <cstring>
+
+/* The Microsoft C++ compiler is non-compliant with the C++ standard and needs
+ * the following definition to disable a security warning on std::strncpy().
+ */
+#ifdef _MSVC_LANG
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 namespace Hazel
 {
 
@@ -15,6 +24,7 @@ namespace Hazel
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& context)
 	{
 		m_Context = context;
+		m_SelectionContext = {};
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender()
@@ -276,7 +286,7 @@ namespace Hazel
 				if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
 				{
 					float verticalFov = glm::degrees(camera.GetPerspectiveVerticalFOV());
-					if (ImGui::DragFloat("Vertical FOV", &verticalFov))
+					if (ImGui::DragFloat("Vertical FOV", &verticalFov, 0.1f, 10.0f, 100.0f, "%.1f"))
 						camera.SetPerspectiveVerticalFOV(glm::radians(verticalFov));
 
 					float perspectiveNear = camera.GetPerspectiveNearClip();

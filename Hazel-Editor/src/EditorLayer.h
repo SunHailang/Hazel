@@ -21,6 +21,14 @@ namespace Hazel
 		virtual void OnEvent(Hazel::Event& event) override;
 
 	private:
+		bool OnKeyPressed(KeyPressedEvent& event);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& event);
+
+		void NewScene();
+		void OpenScene();
+		void SaveSceneAs();
+
+	private:
 		Hazel::OrthographicCameraController m_CameraController;
 
 		Hazel::Ref<Scene> m_ActiveScene;
@@ -28,6 +36,8 @@ namespace Hazel
 		Hazel::Entity m_SecondCameraEntity;
 
 		bool m_PrimaryCamera = true;
+
+		int m_GizmoType = -1;
 
 		// Temp
 		Hazel::Ref<Hazel::VertexArray> m_SquareVA;

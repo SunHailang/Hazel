@@ -21,7 +21,7 @@ project "Hazel-Editor"
 		"%{wks.location}/Hazel/vendor",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.entt}",
-		-- "%{IncludeDir.ImGuizmo}"
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links

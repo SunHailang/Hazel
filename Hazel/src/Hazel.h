@@ -20,6 +20,7 @@
 #include "Hazel/Scene/Component.h"
 #include "Hazel/Scene/Entity.h"
 #include "Hazel/Scene/ScriptableEntity.h"
+#include "Hazel/Scene/SceneSerializer.h"
 
 // -- Renderer ---------------------------------
 #include "Hazel/Renderer/Renderer.h"
@@ -39,6 +40,9 @@
 #include "Hazel/Renderer/Camera.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
+
+#include "Hazel/Math/Math.h"
+#include "Hazel/Utils/PlatformUtils.h"
 // ---------------------------------------------
 
 // -- Entry Point ------------------------------

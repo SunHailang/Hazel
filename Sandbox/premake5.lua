@@ -1,6 +1,5 @@
 -- premake5.lua
 project "Sandbox"
-	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
