@@ -91,12 +91,8 @@ namespace Hazel
 		// Resize
 		m_ActiveScene->OnViewportResize(m_Framebuffer->GetSpecification().Width, m_Framebuffer->GetSpecification().Height);
 
-		if (FramebufferSpecification spec = m_Framebuffer->GetSpecification();
-			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
-			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
-		{
-			m_EditorCamera.SetViewportSize(m_Framebuffer->GetSpecification().Width, m_Framebuffer->GetSpecification().Height);
-		}
+		m_EditorCamera.SetViewportSize(m_Framebuffer->GetSpecification().Width, m_Framebuffer->GetSpecification().Height);
+
 		// Update
 		if (m_ViewportFocused)
 		{
@@ -117,6 +113,19 @@ namespace Hazel
 
 		// Update Scene
 		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+
+		auto [mx, my] = ImGui::GetMousePos();
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+		my = viewportSize.y - my;
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			m_Framebuffer->ReadPixel(1, mouseX, mouseY);
+		}
 
 		m_Framebuffer->Unbind();
 	}
@@ -227,6 +236,7 @@ namespace Hazel
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 				ImGui::Begin("Viewport");
+				auto viewportOffset = ImGui::GetCursorPos(); // Include tab bar
 
 				m_ViewportFocused = ImGui::IsWindowFocused();
 				m_ViewportHovered = ImGui::IsWindowHovered();
@@ -243,7 +253,14 @@ namespace Hazel
 				uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
 				ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
-				//m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+				auto windowSize = ImGui::GetWindowSize();
+				auto minBound = ImGui::GetWindowPos();
+				minBound.x += viewportOffset.x;
+				minBound.y += viewportOffset.y;
+
+				ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
+				m_ViewportBounds[0] = { minBound.x, minBound.y };
+				m_ViewportBounds[1] = { maxBound.x, maxBound.y };
 
 				// ImGuizmo
 				Entity selectEntity = m_SceneHierarchyPanel.GetSelectEntity();
@@ -265,8 +282,8 @@ namespace Hazel
 					// Editor camera
 					const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
 					glm::mat4 cameraView = m_EditorCamera.GetViewMartix();
-					
-					
+
+
 					// Entity transform
 					auto& tc = selectEntity.GetComponent<TransformComponent>();
 					glm::mat4 transform = tc.GetTransform();

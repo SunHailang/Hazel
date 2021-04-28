@@ -2,7 +2,7 @@
 #include "SceneSerializer.h"
 
 #include "Entity.h"
-#include "Component.h"
+#include "Components.h"
 
 #include <fstream>
 #include <yaml-cpp/yaml.h>
@@ -216,7 +216,7 @@ namespace Hazel
 				}
 
 				auto cameraComponent = entity["CameraComponent"];
-				if (cameraComponent)
+				if (cameraComponent && !deserializedEntity.HasComponent<CameraComponent>())
 				{
 					auto& cc = deserializedEntity.AddComponent<CameraComponent>();
 
@@ -236,7 +236,7 @@ namespace Hazel
 				}
 
 				auto spriteRendererComponent = entity["SpriteRendererComponent"];
-				if (spriteRendererComponent)
+				if (spriteRendererComponent && !deserializedEntity.HasComponent<SpriteRendererComponent>())
 				{
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.Color = spriteRendererComponent["Color"].as<glm::vec4>();

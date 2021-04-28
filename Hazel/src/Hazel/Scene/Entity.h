@@ -26,11 +26,7 @@ namespace Hazel
 		template<typename T>
 		T& GetComponent()
 		{
-			bool exist = HasComponent<T>();
-			if (!exist)
-			{
-				HZ_CORE_ASSERT(false, "Entity does not have component!");
-			}
+			HZ_CORE_ASSERT(HasComponent<T>(), "Entity does not have component!");
 			return m_Scene->m_Registry.get<T>(m_EntityHandle);
 		}
 

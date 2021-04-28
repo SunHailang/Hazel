@@ -1,29 +1,56 @@
 Scene: Untitled
 Entities:
-  - Entity: 2
-    TagComponent:
-      Tag: Camera A
-    TransformComponent:
-      Translation: [0, 0, 16.7000008]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      Camera:
-        ProjectionType: 0
-        PerspectiveFOV: 0.928515196
-        PerspectiveNear: 0.00999999978
-        PerspectiveFar: 1000
-        OrthographicSize: 10
-        OrthographicNear: -1
-        OrthographicFar: 28
-      Primary: true
-      FixedAspectRatio: false
-  - Entity: 0
+  - Entity: 5
     TagComponent:
       Tag: Empty Entity
     TransformComponent:
-      Translation: [0, -5.9000001, 0.400000006]
-      Rotation: [0, 0, 0]
+      Translation: [0.349999994, 0, -0.353604406]
+      Rotation: [0, -0.785398245, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
+      Color: [0, 1, 1, 1]
+  - Entity: 4
+    TagComponent:
+      Tag: Empty Entity
+    TransformComponent:
+      Translation: [-0.349159688, 0, -0.351496637]
+      Rotation: [0, 0.785398245, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0, 1, 1]
+  - Entity: 3
+    TagComponent:
+      Tag: Empty Entity
+    TransformComponent:
+      Translation: [3.78782481e-08, -0.5, 0]
+      Rotation: [1.57079613, 0.785398245, -4.21468513e-08]
+      Scale: [0.999999881, 0.999999285, 0.999996662]
+    SpriteRendererComponent:
+      Color: [1, 1, 0, 1]
+  - Entity: 2
+    TagComponent:
+      Tag: Red
+    TransformComponent:
+      Translation: [-0.350495249, 0, 0.350495577]
+      Rotation: [0, -0.785398245, 0]
+      Scale: [0.999988675, 1, 0.999988675]
+    SpriteRendererComponent:
+      Color: [1, 0, 0, 1]
+  - Entity: 1
+    TagComponent:
+      Tag: Green
+    TransformComponent:
+      Translation: [0, 0.5, 0]
+      Rotation: [1.57079613, 0.785398245, -4.21468513e-08]
+      Scale: [0.999999881, 0.999999285, 0.999977827]
+    SpriteRendererComponent:
+      Color: [0, 1, 0, 1]
+  - Entity: 0
+    TagComponent:
+      Tag: Blue
+    TransformComponent:
+      Translation: [0.349999994, 0, 0.349999994]
+      Rotation: [0, 0.785398245, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0, 0, 1, 1]
