@@ -2,7 +2,7 @@
 #include "Scene.h"
 
 #include "Entity.h"
-#include "Component.h"
+#include "Components.h"
 #include "Hazel/Renderer/Renderer2D.h"
 
 //#include <glm/glm.hpp>
@@ -33,7 +33,22 @@ namespace Hazel
 		m_Registry.destroy(entity);
 	}
 
-	void Scene::OnUpdate(Timestep ts)
+	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+
+		auto grop = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		for (auto entity : grop)
+		{
+			auto [transform, sprite] = grop.get<TransformComponent, SpriteRendererComponent>(entity);
+			//Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+		}
+
+		Renderer2D::EndScene();
+	}
+
+	void Scene::OnUpdateRuntime(Timestep ts)
 	{
 		// Update Script
 		{
@@ -75,7 +90,8 @@ namespace Hazel
 			for (auto entity : grop)
 			{
 				auto [transform, sprite] = grop.get<TransformComponent, SpriteRendererComponent>(entity);
-				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+				//Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 			}
 
 			Renderer2D::EndScene();

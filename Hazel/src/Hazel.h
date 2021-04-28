@@ -17,7 +17,7 @@
 #include "Hazel/ImGui/ImGuiLayer.h"
 
 #include "Hazel/Scene/Scene.h"
-#include "Hazel/Scene/Component.h"
+#include "Hazel/Scene/Components.h"
 #include "Hazel/Scene/Entity.h"
 #include "Hazel/Scene/ScriptableEntity.h"
 #include "Hazel/Scene/SceneSerializer.h"
@@ -38,6 +38,7 @@
 #include "Hazel/Renderer/OrthographicCamera.h"
 #include "Hazel/Renderer/OrthographicCameraController.h"
 #include "Hazel/Renderer/Camera.h"
+#include "Hazel/Renderer/EditorCamera.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
 

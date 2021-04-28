@@ -1,6 +1,6 @@
 Scene: Untitled
 Entities:
-  - Entity: 3
+  - Entity: 2
     TagComponent:
       Tag: Camera A
     TransformComponent:
@@ -18,24 +18,6 @@ Entities:
         OrthographicFar: 28
       Primary: true
       FixedAspectRatio: false
-  - Entity: 2
-    TagComponent:
-      Tag: Red Square
-    TransformComponent:
-      Translation: [0.800000012, 3.79999995, 2.9000001]
-      Rotation: [0.628318548, 3.04559946, 0.251327395]
-      Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [1, 0.200000003, 0, 1]
-  - Entity: 1
-    TagComponent:
-      Tag: Square
-    TransformComponent:
-      Translation: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [0, 1, 0, 1]
   - Entity: 0
     TagComponent:
       Tag: Empty Entity

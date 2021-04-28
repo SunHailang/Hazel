@@ -37,8 +37,9 @@ namespace Hazel
 
 		bool m_PrimaryCamera = true;
 
-		int m_GizmoType = -1;
+		EditorCamera m_EditorCamera;
 
+		int m_GizmoType = -1;
 		// Temp
 		Hazel::Ref<Hazel::VertexArray> m_SquareVA;
 		Hazel::Ref<Hazel::Shader> m_FlatColorShader;
